@@ -1,4 +1,4 @@
-#shellWeather
+#shellweather
 
 A simple python program to get ascii weather in your terminal
 
@@ -7,4 +7,4 @@ Either run this command directly or create a shortcut to the command
 
     python weather.py <zipcode>
 
-![alt text](https://github.com/adamryman/shellWeather/raw/master/readmeimage/img.png "Weather!!!")
+![alt text](https://github.com/adamryman/shellweather/raw/master/readmeimage/img.png "Weather!!!")
