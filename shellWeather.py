@@ -55,6 +55,7 @@ if __name__ =='__main__':
   getURL = json.load(urllib2.urlopen('http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + zipcode + '.json'))['location']['requesturl'].split(".")[0]
   fullJson = json.load(urllib2.urlopen('http://api.wunderground.com/api/' + apikey + '/forecast/q/' + getURL + '.json'))
   threeDayForecast = fullJson['forecast']['simpleforecast']['forecastday']
+  print zipcode
   for i in range(3):
     displayWeather(i, threeDayForecast[i])
   printScreen()
