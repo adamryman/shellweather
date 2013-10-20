@@ -2,11 +2,17 @@ import sys
 import json
 import urllib2
 
-screen = [[' ' for j in range(80)] for k in range(50)]
+screen = [[' ' for j in range(80)]]
 positions = [[2,2],[22,2],[42,2]]
 
+def appendLine(n):
+  for i in range(n):
+    screen.append([' ' for j in range(80)])
+
 def safedraw(x,y,char):
-  if x >= 0 and x < len(screen[0]) and y >= 0 and y < len(screen):
+  if y + 1 > len(screen):
+    appendLine(y + 1 - len(screen))
+  if x >= 0 and x < len(screen[0]) and y >= 0:
     screen[y][x] = char
 
 def drawstring(x,y,string):
@@ -46,11 +52,8 @@ if __name__ =='__main__':
   zipcode = sys.argv[1]
 
   apikey = (open('api', 'r')).readline()
-
   getURL = json.load(urllib2.urlopen('http://api.wunderground.com/api/' + apikey + '/geolookup/q/' + zipcode + '.json'))['location']['requesturl'].split(".")[0]
-
   fullJson = json.load(urllib2.urlopen('http://api.wunderground.com/api/' + apikey + '/forecast/q/' + getURL + '.json'))
-
   threeDayForecast = fullJson['forecast']['simpleforecast']['forecastday']
   for i in range(3):
     displayWeather(i, threeDayForecast[i])
