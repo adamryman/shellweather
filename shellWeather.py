@@ -3,19 +3,42 @@ import json
 import urllib2
 
 screen = [[' ' for j in range(80)] for k in range(50)]
+positions = [[2,2],[22,2],[42,2]]
 
-def safeDraw(x,y,char):
+def safedraw(x,y,char):
   if x >= 0 and x < len(screen[0]) and y >= 0 and y < len(screen):
     screen[y][x] = char
 
-def drawLine(x,y,string):
+def drawstring(x,y,string):
   for char in enumerate(string):
-    safeDraw(x + char[0], y, char[1])
+    safedraw(x + char[0], y, char[1])
+  return (x, y)
 
-def drawAscii(x,y,art):
+def drawascii(x,y,art):
   art = open('icons/' + art,'r')
+  location = None
   for line in enumerate(art):
-    drawLine(x,y + line[0],line[1])
+    location = drawstring(x,y + line[0],line[1].rstrip())
+  return location
+
+def displayWeather(n, forecast):
+  art = forecast['icon']
+  high = forecast['high']['fahrenheit']
+  low = forecast['low']['fahrenheit']
+  text = forecast['conditions']
+  day = forecast['date']['weekday']
+  x = positions[n][0]
+  y = positions[n][1]
+
+  drawstring(x + 5,y,day)
+  y = (drawascii(x,y+2,art)[1] + 1)
+  drawstring(x,y,text)
+  drawstring(x,y+1,'high:' + high)
+  drawstring(x+10,y+1,'low:' + low)
+
+def printScreen():
+  for line in screen:
+    print "".join(line)
 
 if __name__ =='__main__':
   if len(sys.argv) < 2 or not sys.argv[1].isdigit():
@@ -29,3 +52,6 @@ if __name__ =='__main__':
   fullJson = json.load(urllib2.urlopen('http://api.wunderground.com/api/' + apikey + '/forecast/q/' + getURL + '.json'))
 
   threeDayForecast = fullJson['forecast']['simpleforecast']['forecastday']
+  for i in range(3):
+    displayWeather(i, threeDayForecast[i])
+  printScreen()
